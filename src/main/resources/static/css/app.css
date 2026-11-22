@@ -1,0 +1,47 @@
+:root {
+    --nexo-primario: #1f3b73;
+    --nexo-acento: #f2a900;
+    --nexo-libre: #1e8e5a;
+    --nexo-ocupado: #c0392b;
+    --nexo-inactivo: #7f8c8d;
+}
+
+body { background: #f4f6fa; }
+
+.nexo-navbar { background: var(--nexo-primario); }
+.nexo-navbar .nav-link.active { color: var(--nexo-acento) !important; font-weight: 600; }
+
+.nexo-logo {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--nexo-acento); color: var(--nexo-primario); font-weight: 800;
+}
+
+.page-title { font-weight: 700; color: var(--nexo-primario); }
+
+.stat-card { border: 0; border-left: 4px solid var(--nexo-primario); }
+.stat-card .valor { font-size: 1.9rem; font-weight: 700; line-height: 1.1; }
+.stat-card.libre { border-left-color: var(--nexo-libre); }
+.stat-card.ocupado { border-left-color: var(--nexo-ocupado); }
+.stat-card.dinero { border-left-color: var(--nexo-acento); }
+
+/* Mapa de espacios */
+.mapa-espacios { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: .75rem; }
+.espacio {
+    border-radius: 10px; padding: .75rem; color: #fff; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,.12);
+}
+.espacio .numero { font-size: 1.4rem; font-weight: 700; }
+.espacio .detalle { font-size: .8rem; opacity: .9; }
+.espacio.libre { background: var(--nexo-libre); }
+.espacio.ocupado { background: var(--nexo-ocupado); }
+.espacio.inactivo { background: var(--nexo-inactivo); }
+
+.placa {
+    display: inline-block; padding: .1rem .5rem; border-radius: 4px;
+    background: #ffd54a; color: #222; border: 1px solid #b9971d;
+    font-family: monospace; font-weight: 700; letter-spacing: .05em;
+}
+
+.table thead th { white-space: nowrap; }
+.card { border-radius: 12px; }

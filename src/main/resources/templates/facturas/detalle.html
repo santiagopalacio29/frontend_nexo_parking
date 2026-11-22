@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Factura')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('facturas')}"></nav>
+
+<main class="container py-4" style="max-width: 640px">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <div class="card shadow">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="nexo-logo">P</span><span class="fw-bold fs-5">Nexo Parking</span>
+                    </div>
+                    <div class="text-muted small mt-1">Comprobante de pago</div>
+                </div>
+                <div class="text-end">
+                    <div class="fw-bold fs-5" th:text="${'Factura #' + factura.idFactura}">Factura #1</div>
+                    <div class="small text-muted"
+                         th:text="${factura.fechaPago != null ? #temporals.format(factura.fechaPago, 'dd/MM/yyyy HH:mm') : ''}">21/11/2026 10:00</div>
+                </div>
+            </div>
+
+            <dl class="row mb-0">
+                <dt class="col-5 text-muted fw-normal">Placa</dt>
+                <dd class="col-7"><span class="placa" th:text="${registro != null ? registro.placa : '-'}">ABC123</span></dd>
+
+                <dt class="col-5 text-muted fw-normal">Espacio</dt>
+                <dd class="col-7" th:text="${espacio != null ? 'N° ' + espacio.numeroEspacio + ' · nivel ' + espacio.nivel : '-'}">N° 1</dd>
+
+                <dt class="col-5 text-muted fw-normal">Entrada</dt>
+                <dd class="col-7" th:text="${registro != null and registro.fechaHoraEntrada != null ? #temporals.format(registro.fechaHoraEntrada, 'dd/MM/yyyy HH:mm') : '-'}">-</dd>
+
+                <dt class="col-5 text-muted fw-normal">Salida</dt>
+                <dd class="col-7" th:text="${registro != null and registro.fechaHoraSalida != null ? #temporals.format(registro.fechaHoraSalida, 'dd/MM/yyyy HH:mm') : '-'}">-</dd>
+
+                <dt class="col-5 text-muted fw-normal">Horas cobradas</dt>
+                <dd class="col-7" th:text="${registro != null and registro.tiempoTotal != null ? #numbers.formatDecimal(registro.tiempoTotal, 1, 'POINT', 0, 'COMMA') : '-'}">1</dd>
+
+                <dt class="col-5 text-muted fw-normal">Método de pago</dt>
+                <dd class="col-7 text-capitalize" th:text="${factura.metodoPago}">efectivo</dd>
+            </dl>
+
+            <hr>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fs-5">Total</span>
+                <span class="fs-3 fw-bold" th:text="${factura.valorTotal != null ? '$ ' + #numbers.formatDecimal(factura.valorTotal, 1, 'POINT', 0, 'COMMA') : '-'}">$ 3.000</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+        <a th:href="@{/facturas}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Facturas</a>
+        <a th:href="@{/parqueo}" class="btn btn-outline-primary">Entradas y salidas</a>
+        <button type="button" class="btn btn-outline-dark ms-auto" onclick="window.print()"><i class="bi bi-printer"></i> Imprimir</button>
+    </div>
+</main>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

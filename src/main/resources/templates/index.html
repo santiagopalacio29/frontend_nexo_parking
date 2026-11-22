@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Panel')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('inicio')}"></nav>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+        <h1 class="page-title h3 mb-0">Panel del parqueadero</h1>
+        <a th:href="@{/parqueo}" class="btn btn-warning fw-semibold">
+            <i class="bi bi-box-arrow-in-right"></i> Registrar entrada / salida
+        </a>
+    </div>
+
+    <!-- Indicadores -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+            <div class="card stat-card shadow-sm h-100"><div class="card-body">
+                <div class="text-muted small">Espacios totales</div>
+                <div class="valor" th:text="${resumen.totalEspacios}">0</div>
+            </div></div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card stat-card libre shadow-sm h-100"><div class="card-body">
+                <div class="text-muted small">Espacios libres</div>
+                <div class="valor text-success" th:text="${resumen.espaciosLibres}">0</div>
+            </div></div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card stat-card ocupado shadow-sm h-100"><div class="card-body">
+                <div class="text-muted small">Vehículos adentro</div>
+                <div class="valor text-danger" th:text="${resumen.vehiculosDentro}">0</div>
+            </div></div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card stat-card dinero shadow-sm h-100"><div class="card-body">
+                <div class="text-muted small">Recaudado hoy (<span th:text="${resumen.facturasHoy}">0</span> facturas)</div>
+                <div class="valor" th:text="'$ ' + ${#numbers.formatDecimal(resumen.ingresosHoy, 1, 'POINT', 0, 'COMMA')}">$ 0</div>
+            </div></div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Mapa de espacios -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold">Mapa de espacios</span>
+                    <span class="small">
+                        <span class="badge" style="background:var(--nexo-libre)">Libre</span>
+                        <span class="badge" style="background:var(--nexo-ocupado)">Ocupado</span>
+                        <span class="badge" style="background:var(--nexo-inactivo)">No disponible</span>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p th:if="${resumen.espacios.isEmpty()}" class="text-muted mb-0">
+                        No hay espacios registrados. <a th:href="@{/espacios/nuevo}">Crear uno</a>.
+                    </p>
+                    <div class="mapa-espacios">
+                        <div th:each="e : ${resumen.espacios}"
+                             th:with="placa=${resumen.placaPorEspacio[e.idEspacio]}"
+                             class="espacio"
+                             th:classappend="${e.disponible ? 'libre' : (placa != null ? 'ocupado' : 'inactivo')}">
+                            <div class="numero" th:text="${e.numeroEspacio}">1</div>
+                            <div class="detalle" th:text="'Nivel ' + ${e.nivel} + ' · ' + ${e.tipoEspacio}">Nivel 1 · carro</div>
+                            <div class="mt-1" th:if="${placa != null}"><span class="placa" th:text="${placa}">ABC123</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Últimos movimientos -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white fw-semibold">Últimos movimientos</div>
+                <ul class="list-group list-group-flush">
+                    <li th:if="${resumen.ultimosMovimientos.isEmpty()}" class="list-group-item text-muted">
+                        Todavía no hay registros de parqueo.
+                    </li>
+                    <li th:each="r : ${resumen.ultimosMovimientos}" class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="placa" th:text="${r.placa}">ABC123</span>
+                            <div class="small text-muted"
+                                 th:text="'Entró ' + ${r.fechaHoraEntrada != null ? #temporals.format(r.fechaHoraEntrada, 'dd/MM HH:mm') : '-'}">Entró 21/11 08:00</div>
+                        </div>
+                        <span th:if="${r.activo}" class="badge text-bg-danger">Adentro</span>
+                        <span th:unless="${r.activo}" class="badge text-bg-secondary"
+                              th:text="'Salió ' + ${#temporals.format(r.fechaHoraSalida, 'HH:mm')}">Salió</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

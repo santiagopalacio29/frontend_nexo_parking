@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: frontend-nexo-parking
+  cloud:
+    # Evita que Spring Cloud bloquee el arranque si la versión de Spring Boot es más nueva que la que conoce
+    compatibility-verifier:
+      enabled: false
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 3000
+            read-timeout: 5000
+
+server:
+  port: 8091
+
+# URL del backend de Nexo Parking (repo Nexo_parking).
+# Se puede cambiar sin tocar código: --nexo.api.base-url=http://otra-ip:8080/parking-api
+nexo:
+  api:
+    base-url: http://localhost:8080/parking-api

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cliente')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('clientes')}"></nav>
+
+<main class="container py-4" style="max-width: 760px">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <h1 class="page-title h3 mb-3" th:text="${cliente.idCliente == null} ? 'Nuevo cliente' : 'Editar cliente'">Cliente</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post" class="row g-3">
+                <input type="hidden" th:field="*{idCliente}">
+
+                <div class="col-md-6">
+                    <label for="documento" class="form-label">Documento *</label>
+                    <input type="text" id="documento" th:field="*{documento}" class="form-control" required maxlength="20">
+                </div>
+                <div class="col-md-6">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input type="tel" id="telefono" th:field="*{telefono}" class="form-control" maxlength="20">
+                </div>
+                <div class="col-md-6">
+                    <label for="nombre" class="form-label">Nombre *</label>
+                    <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required maxlength="60">
+                </div>
+                <div class="col-md-6">
+                    <label for="apellido" class="form-label">Apellido *</label>
+                    <input type="text" id="apellido" th:field="*{apellido}" class="form-control" required maxlength="60">
+                </div>
+                <div class="col-12">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" th:field="*{email}" class="form-control" maxlength="100">
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Guardar</button>
+                    <a th:href="@{/clientes}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

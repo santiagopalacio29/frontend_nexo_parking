@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Tarifas')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('tarifas')}"></nav>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="page-title h3 mb-0">Tarifas</h1>
+        <a th:href="@{/tarifas/nuevo}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nueva tarifa</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo de vehículo</th>
+                    <th class="text-end">Valor hora</th>
+                    <th class="text-end">Valor día</th>
+                    <th class="text-end">Mensualidad</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="t : ${tarifas}">
+                    <td th:text="${t.idTarifa}">1</td>
+                    <td class="text-capitalize fw-semibold" th:text="${t.tipoVehiculo}">carro</td>
+                    <td class="text-end" th:text="${t.valorHora != null ? '$ ' + #numbers.formatDecimal(t.valorHora, 1, 'POINT', 0, 'COMMA') : '-'}">$ 3.000</td>
+                    <td class="text-end" th:text="${t.valorDia != null ? '$ ' + #numbers.formatDecimal(t.valorDia, 1, 'POINT', 0, 'COMMA') : '-'}">$ 20.000</td>
+                    <td class="text-end" th:text="${t.valorMensualidad != null ? '$ ' + #numbers.formatDecimal(t.valorMensualidad, 1, 'POINT', 0, 'COMMA') : '-'}">$ 150.000</td>
+                    <td class="text-end text-nowrap">
+                        <a th:href="@{/tarifas/{id}/editar(id=${t.idTarifa})}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-pencil"></i> Editar</a>
+                        <form th:action="@{/tarifas/{id}/eliminar(id=${t.idTarifa})}" method="post" class="d-inline"
+                              onsubmit="return confirm('¿Eliminar esta tarifa?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${tarifas.isEmpty()}">
+                    <td colspan="6" class="text-center text-muted py-4">No hay tarifas registradas.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <p class="small text-muted mt-2">El cobro de cada salida se calcula en el backend con el valor por hora (mínimo una hora).</p>
+</main>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

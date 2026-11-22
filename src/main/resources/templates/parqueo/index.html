@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Entradas y salidas')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('parqueo')}"></nav>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <h1 class="page-title h3 mb-4">Entradas y salidas</h1>
+
+    <div class="row g-4">
+        <!-- Registrar entrada -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-semibold"><i class="bi bi-box-arrow-in-right text-success"></i> Registrar entrada</div>
+                <div class="card-body">
+                    <form th:action="@{/parqueo/entrada}" method="post" class="d-grid gap-3">
+                        <div>
+                            <label for="placa" class="form-label">Vehículo</label>
+                            <select id="placa" name="placa" class="form-select" required>
+                                <option value="">Selecciona la placa…</option>
+                                <option th:each="v : ${vehiculosDisponibles}" th:value="${v.placa}"
+                                        th:attr="data-tipo=${v.tipoVehiculo}"
+                                        th:text="${v.placa + ' · ' + v.tipoVehiculo + (v.marca != null ? ' · ' + v.marca : '')}">ABC123</option>
+                            </select>
+                            <div class="form-text">
+                                ¿No aparece? <a th:href="@{/vehiculos/nuevo}">Registra el vehículo</a>.
+                            </div>
+                        </div>
+                        <div>
+                            <label for="idEspacio" class="form-label">Espacio libre</label>
+                            <select id="idEspacio" name="idEspacio" class="form-select" required>
+                                <option value="">Selecciona el espacio…</option>
+                                <option th:each="e : ${espaciosLibres}" th:value="${e.idEspacio}"
+                                        th:attr="data-tipo=${e.tipoEspacio}"
+                                        th:text="${'Espacio ' + e.numeroEspacio + ' · nivel ' + e.nivel + ' · ' + e.tipoEspacio}">Espacio 1</option>
+                            </select>
+                            <div class="form-text" th:if="${espaciosLibres.isEmpty()}">No hay espacios libres en este momento.</div>
+                        </div>
+                        <button type="submit" class="btn btn-success" th:disabled="${espaciosLibres.isEmpty()}">
+                            <i class="bi bi-check2-circle"></i> Registrar entrada
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vehículos adentro -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-semibold d-flex justify-content-between">
+                    <span><i class="bi bi-car-front-fill text-danger"></i> Vehículos adentro</span>
+                    <span class="badge text-bg-danger" th:text="${activos.size()}">0</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Placa</th>
+                            <th>Espacio</th>
+                            <th>Entrada</th>
+                            <th style="min-width: 260px">Registrar salida</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="r : ${activos}" th:with="esp=${espaciosPorId[r.idEspacio]}">
+                            <td><span class="placa" th:text="${r.placa}">ABC123</span></td>
+                            <td th:text="${esp != null ? 'N° ' + esp.numeroEspacio + ' (nivel ' + esp.nivel + ')' : r.idEspacio}">N° 1</td>
+                            <td th:text="${r.fechaHoraEntrada != null ? #temporals.format(r.fechaHoraEntrada, 'dd/MM/yyyy HH:mm') : '-'}">21/11/2026 08:00</td>
+                            <td>
+                                <form th:action="@{/parqueo/{id}/salida(id=${r.idRegistro})}" method="post"
+                                      class="d-flex gap-2"
+                                      onsubmit="return confirm('¿Registrar la salida y generar la factura?');">
+                                    <select name="metodoPago" class="form-select form-select-sm" required aria-label="Método de pago">
+                                        <option th:each="m : ${metodosPago}" th:value="${m}" th:text="${m}" class="text-capitalize">efectivo</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-danger text-nowrap">
+                                        <i class="bi bi-box-arrow-right"></i> Salida
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${activos.isEmpty()}">
+                            <td colspan="4" class="text-center text-muted py-4">No hay vehículos dentro del parqueadero.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-white fw-semibold"><i class="bi bi-clock-history"></i> Historial de salidas</div>
+        <div class="table-responsive">
+            <table class="table table-sm table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Placa</th>
+                    <th>Espacio</th>
+                    <th>Entrada</th>
+                    <th>Salida</th>
+                    <th class="text-end">Horas cobradas</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="r : ${historial}" th:with="esp=${espaciosPorId[r.idEspacio]}">
+                    <td th:text="${r.idRegistro}">1</td>
+                    <td><span class="placa" th:text="${r.placa}">ABC123</span></td>
+                    <td th:text="${esp != null ? 'N° ' + esp.numeroEspacio : r.idEspacio}">N° 1</td>
+                    <td th:text="${r.fechaHoraEntrada != null ? #temporals.format(r.fechaHoraEntrada, 'dd/MM/yyyy HH:mm') : '-'}">-</td>
+                    <td th:text="${r.fechaHoraSalida != null ? #temporals.format(r.fechaHoraSalida, 'dd/MM/yyyy HH:mm') : '-'}">-</td>
+                    <td class="text-end" th:text="${r.tiempoTotal != null ? #numbers.formatDecimal(r.tiempoTotal, 1, 'POINT', 0, 'COMMA') : '-'}">1</td>
+                </tr>
+                <tr th:if="${historial.isEmpty()}">
+                    <td colspan="6" class="text-center text-muted py-3">Aún no hay salidas registradas.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<script>
+    // Muestra solo los espacios del mismo tipo que el vehículo seleccionado (carro / moto).
+    (function () {
+        const placa = document.getElementById('placa');
+        const espacio = document.getElementById('idEspacio');
+        if (!placa || !espacio) return;
+        placa.addEventListener('change', function () {
+            const tipo = (placa.selectedOptions[0]?.dataset.tipo || '').toLowerCase();
+            for (const opcion of espacio.options) {
+                if (!opcion.value) continue;
+                const coincide = !tipo || (opcion.dataset.tipo || '').toLowerCase() === tipo;
+                opcion.hidden = !coincide;
+                if (!coincide && opcion.selected) espacio.value = '';
+            }
+        });
+    })();
+</script>
+</body>
+</html>

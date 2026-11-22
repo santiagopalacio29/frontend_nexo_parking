@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Vehículo')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('vehiculos')}"></nav>
+
+<main class="container py-4" style="max-width: 760px">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <h1 class="page-title h3 mb-3" th:text="${edicion} ? 'Editar vehículo' : 'Nuevo vehículo'">Vehículo</h1>
+
+    <div th:if="${clientes.isEmpty()}" class="alert alert-warning">
+        Primero debes <a th:href="@{/clientes/nuevo}">registrar un cliente</a> para asignarle el vehículo.
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form th:action="@{/vehiculos/guardar}" th:object="${vehiculo}" method="post" class="row g-3">
+                <input type="hidden" name="edicion" th:value="${edicion}">
+
+                <div class="col-md-6">
+                    <label for="placa" class="form-label">Placa *</label>
+                    <input type="text" id="placa" th:field="*{placa}" class="form-control text-uppercase"
+                           th:readonly="${edicion}" required maxlength="10" placeholder="ABC123">
+                </div>
+                <div class="col-md-6">
+                    <label for="tipoVehiculo" class="form-label">Tipo de vehículo *</label>
+                    <select id="tipoVehiculo" th:field="*{tipoVehiculo}" class="form-select" required>
+                        <option value="">Selecciona…</option>
+                        <option th:each="t : ${tarifas}" th:value="${t.tipoVehiculo}" th:text="${t.tipoVehiculo}">carro</option>
+                    </select>
+                    <div class="form-text">Los tipos salen de las tarifas configuradas.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="marca" class="form-label">Marca</label>
+                    <input type="text" id="marca" th:field="*{marca}" class="form-control" maxlength="40">
+                </div>
+                <div class="col-md-6">
+                    <label for="color" class="form-label">Color</label>
+                    <input type="text" id="color" th:field="*{color}" class="form-control" maxlength="30">
+                </div>
+                <div class="col-12">
+                    <label for="documentoCliente" class="form-label">Propietario *</label>
+                    <select id="documentoCliente" th:field="*{documentoCliente}" class="form-select" required>
+                        <option value="">Selecciona…</option>
+                        <option th:each="c : ${clientes}" th:value="${c.documento}"
+                                th:text="${c.documento + ' - ' + c.nombre + ' ' + c.apellido}">1000 - Ana</option>
+                    </select>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Guardar</button>
+                    <a th:href="@{/vehiculos}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Tarifa')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('tarifas')}"></nav>
+
+<main class="container py-4" style="max-width: 760px">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <h1 class="page-title h3 mb-3" th:text="${edicion} ? 'Editar tarifa' : 'Nueva tarifa'">Tarifa</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form th:action="@{/tarifas/guardar}" th:object="${tarifa}" method="post" class="row g-3">
+                <input type="hidden" name="edicion" th:value="${edicion}">
+
+                <div class="col-md-4">
+                    <label for="idTarifa" class="form-label">ID *</label>
+                    <input type="number" id="idTarifa" th:field="*{idTarifa}" class="form-control" min="1"
+                           th:readonly="${edicion}" required>
+                </div>
+                <div class="col-md-8">
+                    <label for="tipoVehiculo" class="form-label">Tipo de vehículo *</label>
+                    <input type="text" id="tipoVehiculo" th:field="*{tipoVehiculo}" class="form-control"
+                           required maxlength="20" placeholder="carro, moto…">
+                </div>
+                <div class="col-md-4">
+                    <label for="valorHora" class="form-label">Valor por hora *</label>
+                    <input type="number" id="valorHora" th:field="*{valorHora}" class="form-control" min="1" step="any" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="valorDia" class="form-label">Valor por día</label>
+                    <input type="number" id="valorDia" th:field="*{valorDia}" class="form-control" min="0" step="any">
+                </div>
+                <div class="col-md-4">
+                    <label for="valorMensualidad" class="form-label">Mensualidad</label>
+                    <input type="number" id="valorMensualidad" th:field="*{valorMensualidad}" class="form-control" min="0" step="any">
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Guardar</button>
+                    <a th:href="@{/tarifas}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+</body>
+</html>
