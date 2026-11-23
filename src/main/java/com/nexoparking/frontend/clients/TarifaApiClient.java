@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.nexoparking.frontend.dtos.TarifaDto;
 
-/** Consume /api/tarifa del backend. */
+
 @FeignClient(name = "tarifa-api", url = "${nexo.api.base-url}", path = "/api/tarifa")
 public interface TarifaApiClient {
 

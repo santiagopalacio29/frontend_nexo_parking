@@ -20,7 +20,7 @@ import com.nexoparking.frontend.services.ParqueaderoServiceInterface;
 
 import feign.FeignException;
 
-/** Caso de uso principal: registrar entrada y salida de vehículos. */
+
 @Controller
 @RequestMapping("/parqueo")
 public class ParqueoViewController {

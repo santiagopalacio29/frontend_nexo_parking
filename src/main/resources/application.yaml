@@ -19,4 +19,4 @@ server:
 # Se puede cambiar sin tocar código: --nexo.api.base-url=http://otra-ip:8080/parking-api
 nexo:
   api:
-    base-url: http://localhost:8080/parking-api
+    base-url: http://localhost:8080

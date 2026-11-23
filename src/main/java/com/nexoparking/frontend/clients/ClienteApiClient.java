@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.nexoparking.frontend.dtos.ClienteDto;
 
-/** Consume /api/clientes del backend. */
+
 @FeignClient(name = "cliente-api", url = "${nexo.api.base-url}", path = "/api/clientes")
 public interface ClienteApiClient {
 

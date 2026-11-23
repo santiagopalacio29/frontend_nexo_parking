@@ -6,7 +6,7 @@ import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
 
-/** Datos que muestra el panel principal. Lo arma el front a partir de varias APIs del backend. */
+
 @Getter
 @Builder
 public class ResumenParqueadero {

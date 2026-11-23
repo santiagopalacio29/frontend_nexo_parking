@@ -11,7 +11,7 @@ import com.nexoparking.frontend.dtos.SalidaRequest;
 import com.nexoparking.frontend.dtos.EntradaRequest;
 import com.nexoparking.frontend.dtos.VehiculoDto;
 
-/** Lógica de presentación del parqueadero: combina espacios, vehículos, registros y facturas. */
+
 public interface ParqueaderoServiceInterface {
 
     ResumenParqueadero obtenerResumen();

@@ -14,7 +14,7 @@ import com.nexoparking.frontend.dtos.FacturaDto;
 import com.nexoparking.frontend.dtos.RegistroParqueoDto;
 import com.nexoparking.frontend.dtos.SalidaRequest;
 
-/** Consume /api/parqueo del backend: entradas, salidas e historial. */
+
 @FeignClient(name = "parqueo-api", url = "${nexo.api.base-url}", path = "/api/parqueo")
 public interface ParqueoApiClient {
 

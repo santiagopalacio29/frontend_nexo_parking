@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import feign.FeignException;
 import feign.RetryableException;
 
-/** Traduce los errores HTTP del backend a mensajes claros para el usuario. */
+
 @Component
 public class ApiErrorTranslator {
 

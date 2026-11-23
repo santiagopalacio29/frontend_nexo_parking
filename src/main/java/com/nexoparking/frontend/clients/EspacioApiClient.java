@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.nexoparking.frontend.dtos.EspacioDto;
 
-/**
- * Consume /api/espacio del backend.
- * El PUT del backend solo actualiza el campo estado (libre / no disponible).
- */
+
 @FeignClient(name = "espacio-api", url = "${nexo.api.base-url}", path = "/api/espacio")
 public interface EspacioApiClient {
 

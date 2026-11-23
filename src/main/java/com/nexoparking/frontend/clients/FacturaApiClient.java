@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.nexoparking.frontend.dtos.FacturaDto;
 
-/**
- * Consume /api/factura del backend.
- * Las facturas se generan al registrar la salida de un vehículo, por eso aquí solo se consultan o eliminan.
- */
+
 @FeignClient(name = "factura-api", url = "${nexo.api.base-url}", path = "/api/factura")
 public interface FacturaApiClient {
 

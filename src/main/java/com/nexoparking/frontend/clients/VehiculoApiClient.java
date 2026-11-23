@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.nexoparking.frontend.dtos.VehiculoDto;
 
-/** Consume /api/vehiculo del backend. La llave de un vehículo es su placa. */
+
 @FeignClient(name = "vehiculo-api", url = "${nexo.api.base-url}", path = "/api/vehiculo")
 public interface VehiculoApiClient {
 

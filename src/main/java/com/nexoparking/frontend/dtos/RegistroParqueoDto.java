@@ -19,7 +19,7 @@ public class RegistroParqueoDto {
     private LocalDateTime fechaHoraSalida;
     private Double tiempoTotal;
 
-    /** Un registro está activo mientras el vehículo no haya salido. */
+
     public boolean isActivo() {
         return fechaHoraSalida == null;
     }

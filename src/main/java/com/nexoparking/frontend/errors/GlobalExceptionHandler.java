@@ -8,11 +8,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 
-/**
- * Manejo centralizado de los errores al consumir el backend.
- * - Si falla una consulta (GET) se muestra la página de error.
- * - Si falla un formulario (POST) se vuelve al listado de la sección con el mensaje de error.
- */
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -37,7 +33,7 @@ public class GlobalExceptionHandler {
         return "redirect:" + seccionDe(request.getServletPath());
     }
 
-    /** "/clientes/5/eliminar" -> "/clientes" */
+    
     static String seccionDe(String ruta) {
         if (ruta == null || ruta.isBlank() || "/".equals(ruta)) {
             return "/";
